@@ -1,2 +1,4 @@
 android/out
-web/venv
+venv
+*.pyc
+*.swp
