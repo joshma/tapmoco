@@ -1,0 +1,13 @@
+{
+  "name": "Tapmo.co",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "The official extension of Tapmo.co.",
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "permissions": [
+    "tabs",
+    "http://*"
+  ]
+}
