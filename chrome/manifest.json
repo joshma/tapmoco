@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "The official extension of Tapmo.co.",
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "19.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [
@@ -16,6 +16,10 @@
   "permissions": [
     "tabs",
     "history",
+    "notifications",
     "http://*/"
-  ]
+  ],
+  "background": {
+    "page": "popup.html"
+  }
 }
