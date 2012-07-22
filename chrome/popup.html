@@ -1,24 +1,14 @@
 <!DOCTYPE html>
 <head>
     <title>Tapmoco</title>
-    <script src="http://js.pusher.com/1.11/pusher.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-    // Enable pusher logging - don't include this in production
-    Pusher.log = function(message) {
-        if (window.console && window.console.log) window.console.log(message);
-    };
-
-    // Flash fallback logging - don't include this in production
-    WEB_SOCKET_DEBUG = true;
-
-    var pusher = new Pusher('f00bf3021b6b454ddb23');
-    var channel = pusher.subscribe('test_channel');
-    channel.bind('my_event', function(data) {
-        alert(data);
-    });
-    </script>
+    <script src="pusher.min.js"></script>
+    <script src="script.js"></script>
+    <script type="text/javascript"></script>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="container">
-    </div>
+    <ul id="notifications">
+        <li class="unread">But this is what a new one would look like.</li>
+        <li>No notifications yet. :(</li>
+    </ul>
 </body>
