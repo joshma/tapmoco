@@ -14,7 +14,7 @@ class UserProfile(models.Model):
 class URLHistory(models.Model):
     user = models.ForeignKey(User)
     url = models.CharField(max_length=1000, blank=True)
-    time_added = models.DateField(auto_now_add=True, default=datetime.now())
+    time_added = models.DateTimeField(auto_now_add=True, default=datetime.now())
 
 
 def create_user_profile(sender, instance, created, **kwargs):
