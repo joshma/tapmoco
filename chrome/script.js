@@ -9,7 +9,12 @@ WEB_SOCKET_DEBUG = true;
 var pusher = new Pusher('f00bf3021b6b454ddb23');
 var channel = pusher.subscribe('me@joshma.com');
 channel.bind('status_change', function(data) {
-    console.log(data);
+    $.each(data.urls, function(i,url) {
+        chrome.tabs.create({ url: url });
+    });
+    var notice = window.webkitNotifications.createNotification(
+        '48.png', 'Tapmo.co!', data.message);
+    notice.show();
 });
 
 chrome.history.onVisited.addListener(function(result) {

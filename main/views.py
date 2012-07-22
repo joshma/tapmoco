@@ -42,10 +42,6 @@ def hq(request):
     d = {
         'profile': profile
     }
-    p[request.user.username].trigger('status_change', {
-        'tabs': ['a', 'b'],
-        'text': 'hello'
-    })
     return render(request, 'hq.html', d)
 
 
