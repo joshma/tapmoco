@@ -66,10 +66,10 @@ def notify(request):
 
 
 def get_photo_url(auth_token):
-    url = "https://api.foursquare.com/v2/users/self"
     params = urllib.urlencode([('oauth_token', auth_token)])
-    print "POST:\n%s\n%s" % (url, params)
-    res = urllib2.urlopen(url, params).read()
+    url = "https://api.foursquare.com/v2/users/self?%s" % params
+    print "getting: %s" % url
+    res = urllib2.urlopen(url).read()
     print "received res:" % res
     res_data = json.loads(res)
     photo = res_data['response']['user']['photo']
