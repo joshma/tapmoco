@@ -14,7 +14,6 @@ def signup(request):
 
 @require_POST
 def login_view(request):
-    # WOO HARDCODED LOGIN
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     user = authenticate(username=username, password=password)
@@ -31,4 +30,11 @@ def logout_view(request):
 
 @login_required
 def hq(request):
-    return render(request, 'hq.html')
+    profile = request.user.get_profile()
+    if profile.secret == '':
+        profile.secret = 'NEWSECRET'
+        profile.save()
+    d = {
+        'profile': profile
+    }
+    return render(request, 'hq.html', d)
