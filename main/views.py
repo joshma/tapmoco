@@ -80,6 +80,7 @@ def generate_secret():
 
 def build_market_app(username):
     def out(application):
+        print "checking out %s" (application.check_reg_url % username)
         try:
             res = urllib2.urlopen(application.check_reg_url % username).read()
         except urllib2.HTTPError:
