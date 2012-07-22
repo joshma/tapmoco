@@ -12,7 +12,7 @@ class UserProfile(models.Model):
 
 
 class URLHistory(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     url = models.CharField(max_length=1000, blank=True)
     time_added = models.DateField(auto_now_add=True, default=datetime.now())
 
