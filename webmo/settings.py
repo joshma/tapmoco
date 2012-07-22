@@ -121,7 +121,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gunicorn',
-    'kombu.transport.django',
     'djcelery',
     'south',
     'main',
@@ -182,4 +181,6 @@ LOGIN_REDIRECT_URL = reverse_lazy('hq')
 
 LOGIN_URL = reverse_lazy('home')
 
-BROKER_BACKEND = 'django'
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/')
