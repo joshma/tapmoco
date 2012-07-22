@@ -7,18 +7,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'main.views.home', name='home'),
-    url(r'^signup', 'main.views.signup', name='signup'),
-    url(r'^login', 'main.views.login_view', name='login'),
-    url(r'^logout', 'main.views.logout_view', name='logout'),
-    url(r'^user/(?P<username>\w+@\w+\.\w+)/loc/(?P<loc>\d+)/status', 'main.mobile.status'),
-    url(r'^user/(?P<username>\w+@\w+\.\w+)/loc/(?P<loc>\d+)/tabs', 'main.mobile.tabs'),
-    url(r'^user/(?P<username>\w+@\w+\.\w+)/history', 'main.mobile.history'),
-
-    url(r'^hq/$', 'main.views.hq', name='hq'),
-    url(r'^hq/url$', 'main.views.url_update', name='url_update'),
-
-    url(r'^checkin/', include('checkin.urls')),
+    url(r'^$', 'checkin.views.checkin'),
+    url(r'^callback$', 'checkin.views.callback', name='checkin_callback'),
     # Examples:
     # url(r'^$', 'webmo.views.home', name='home'),
     # url(r'^webmo/', include('webmo.foo.urls')),
