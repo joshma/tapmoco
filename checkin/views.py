@@ -73,7 +73,7 @@ def get_photo_url(auth_token):
     print "received res:" % res
     res_data = json.loads(res)
     photo = res_data['response']['user']['photo']
-    return "%s48x48%s" % (photo['prefix'], photo['suffix'])
+    return photo
 
 
 @login_required
