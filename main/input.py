@@ -7,6 +7,6 @@ def android(request, userid=0, loc=0):
     global count
     if request.method == 'POST':
         count += 1
-        m = count % 2
-        return HttpResponse(m)
-    return HttpResponse(count)
+        return HttpResponse(count)
+    m = count % 2
+    return HttpResponse(m)
