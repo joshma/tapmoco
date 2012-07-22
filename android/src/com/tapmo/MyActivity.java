@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.*;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -24,6 +23,7 @@ public class MyActivity extends Activity {
     ProgressBar progressBar;
     Context context;
     LinearLayout loginContainer;
+    Button signInButton;
     /**
      * Called when the activity is first created.
      */
@@ -37,6 +37,13 @@ public class MyActivity extends Activity {
         deskBackground = (ImageView) findViewById(R.id.desk_background);
         progressBar = (ProgressBar) findViewById(R.id.progress_circle);
         loginContainer = (LinearLayout) findViewById(R.id.login_container);
+
+        signInButton = (Button) findViewById(R.id.sign_in);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                doSignIn();
+            }
+        });
 
         data = getIntent().getData();
 
@@ -89,6 +96,17 @@ public class MyActivity extends Activity {
                     }
                 }
             });
+        }
+    }
+    private void doSignIn() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.initiateScan();
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null) {
+            String contents = scanResult.getContents();
+            System.out.println("Tapmo contents: "+contents);
         }
     }
 }

@@ -11,7 +11,7 @@ import re
 import urllib2
 import simplejson as json
 
-SECRET_SIZE = 10
+SECRET_SIZE = 20
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
 
 
@@ -151,3 +151,16 @@ def delete_application(request):
         application.delete()
     messages.success(request, "Application %s successfully deleted." % application.name)
     return redirect('hq')
+
+
+@login_required
+def auth_view(request):
+    secret = generate_secret()
+    profile = request.user.get_profile()
+    profile.auth_token = secret
+    profile.save()
+    url = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http://www.tapmo.co/user/'+request.user.email+'/auth/'+secret
+    d = {
+        'url': url
+    }
+    return render(request, 'auth.html', d)

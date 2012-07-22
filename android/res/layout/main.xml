@@ -51,14 +51,6 @@
                 android:onClick="doSignIn"
                 style="@style/Button"
                 />
-        <Button
-                android:id="@+id/sign_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/sign_up"
-                android:onClick="doSignUp"
-                style="@style/Button"
-                />
     </LinearLayout>
 </RelativeLayout>
 

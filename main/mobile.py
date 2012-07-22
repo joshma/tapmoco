@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_POST
 
 from tasks import notify_status_change
-from models import URLHistory, AppRegistration
+from models import URLHistory, AppRegistration, UserProfile
 
 
 @csrf_exempt
@@ -48,3 +48,14 @@ def history(request, username=None):
     url_history = URLHistory(url=url, user=user)
     url_history.save()
     return HttpResponse('URL successfully saved')
+
+
+@csrf_exempt
+def auth(request, auth_token=None):
+    if not auth_token:
+        return HttpResponseBadRequest('auth token missing')
+    try:
+        user = UserProfile.objects.get(auth_token=auth_token)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest('could not find user with that auth token')
+    return HttpResponse('Success:'+user.user.email)

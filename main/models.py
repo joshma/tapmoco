@@ -7,6 +7,7 @@ from datetime import datetime
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     at_desk = models.BooleanField(default=False)
+    auth_token = models.CharField(max_length=1000)
 
 
 class Application(models.Model):
