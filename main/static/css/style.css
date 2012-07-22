@@ -1,0 +1,7 @@
+body {
+    padding-top: 10px;
+}
+input[type=text],
+input[type=password] {
+    margin: 0;
+}
