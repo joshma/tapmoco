@@ -1,8 +1,10 @@
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 count = 0
 
 
+@csrf_exempt
 def android(request, userid=0, loc=0):
     global count
     if request.method == 'POST':

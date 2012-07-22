@@ -4,6 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import random
 import string
+import pusher
+
+pusher.app_id = '24415'
+pusher.key = 'f00bf3021b6b454ddb23'
+pusher.secret = 'e03efec23cce19d45ca1'
 
 SECRET_SIZE = 10
 
