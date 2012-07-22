@@ -34,7 +34,7 @@ def get_redirect_uri():
 
 @csrf_exempt
 @require_POST
-def notify(request, username=None):
+def update(request, username=None):
     if not username:
         return HttpResponseBadRequest('bad username')
     urls = []
