@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    url = models.CharField(max_length=1000, default="www.tapmo.co")
+    url = models.CharField(max_length=1000, default="")
     secret = models.CharField(max_length=20, default="")
     at_desk = models.BooleanField(default=False)
 
