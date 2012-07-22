@@ -22,8 +22,9 @@ public class MyActivity extends Activity {
     Uri data;
     ProgressBar progressBar;
     Context context;
-    LinearLayout loginContainer;
+    LinearLayout loginContainer, authorizedContainer;
     Button signInButton;
+    TextView welcomeText;
     /**
      * Called when the activity is first created.
      */
@@ -37,6 +38,8 @@ public class MyActivity extends Activity {
         deskBackground = (ImageView) findViewById(R.id.desk_background);
         progressBar = (ProgressBar) findViewById(R.id.progress_circle);
         loginContainer = (LinearLayout) findViewById(R.id.login_container);
+        authorizedContainer = (LinearLayout) findViewById(R.id.authorized_container);
+        welcomeText = (TextView) findViewById(R.id.welcome_text);
 
         signInButton = (Button) findViewById(R.id.sign_in);
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +106,8 @@ public class MyActivity extends Activity {
         integrator.initiateScan();
     }
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        loginContainer.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
             String contents = scanResult.getContents();
@@ -110,10 +115,11 @@ public class MyActivity extends Activity {
             client.get(contents, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
-                    System.out.println("Login response: "+ response);
+                    System.out.println("tapmo content response: "+ response);
                     if (response.startsWith("Success:")) {
-                        loginContainer.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                        authorizedContainer.setVisibility(View.VISIBLE);
+                        welcomeText.setText("Welcome back, " + response.replace("Success:",""));
                     }
                 }
             });

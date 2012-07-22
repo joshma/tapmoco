@@ -9,4 +9,7 @@
         <item name="android:textSize">60sp</item>
         <item name="android:textColor">#E0E0E0</item>
     </style>
+    <style name="WelcomeBack" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">30sp</item>
+    </style>
 </resources>
