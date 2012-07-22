@@ -174,7 +174,7 @@ def auth_view(request):
     profile = request.user.get_profile()
     profile.auth_token = secret
     profile.save()
-    url = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http://www.tapmo.co/user/'+request.user.email+'/auth/'+secret
+    url = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http://www.tapmo.co/auth/'+secret
     d = {
         'url': url
     }

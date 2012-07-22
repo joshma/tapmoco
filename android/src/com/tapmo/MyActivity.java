@@ -106,7 +106,17 @@ public class MyActivity extends Activity {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
             String contents = scanResult.getContents();
-            System.out.println("Tapmo contents: "+contents);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(contents, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(String response) {
+                    System.out.println("Login response: "+ response);
+                    if (response.startsWith("Success:")) {
+                        loginContainer.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
         }
     }
 }
