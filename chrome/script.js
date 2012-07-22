@@ -6,6 +6,15 @@ Pusher.log = function(message) {
 // Flash fallback logging - don't include this in production
 WEB_SOCKET_DEBUG = true;
 
+var append_notice = function(icon, message) {
+    var notice = window.webkitNotifications.createNotification(
+        icon, 'Tapmo.co!', message);
+    notice.show();
+
+    var el = $('<li>').html('<img src="' + icon + '"> ' + message);
+    $('#notifications').append(el);
+};
+
 var pusher = new Pusher('f00bf3021b6b454ddb23');
 var channel = pusher.subscribe('me@joshma.com');
 channel.bind('status_change', function(data) {
@@ -13,9 +22,7 @@ channel.bind('status_change', function(data) {
         chrome.tabs.create({ url: url });
     });
     if (data.message.length > 0) {
-        var notice = window.webkitNotifications.createNotification(
-            data.icon, 'Tapmo.co!', data.message);
-        notice.show();
+        append_notice(data.icon, data.message);
     }
 });
 
