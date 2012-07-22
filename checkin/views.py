@@ -36,22 +36,43 @@ def get_redirect_uri():
 @require_POST
 def notify(request):
     urls = []
-    checkin_url = "https://api.foursquare.com/v2/checkins/add"
-    # Yay Dropbox
-    username = request.POST.get('username', None)
-    if not username:
-        return HttpResponseBadRequest('bad username')
-    auth_token = FoursquareAuthToken.objects.get(username=username)
-    params = urllib.urlencode([
-        ('oauth_token', auth_token.token),
-        ('venueId', '4f3970aee4b08f009b927739'),
-        ('shout', 'An NFC generated checkin for Greylock hackfest!'),
-        ('broadcast', 'public,twitter'),
-    ])
-    print "POST:\n%s\n%s" % (checkin_url, params)
-    urllib2.urlopen(checkin_url, params)
-    message = "Checked into Foursquare!"
-    return HttpResponse(tapmo.build_response(urls, message))
+    status = request.POST.get('status', '0')
+    message = ""
+    icon = None
+    if status == '1':
+        checkin_url = "https://api.foursquare.com/v2/checkins/add"
+        # Yay hard-code Dropbox
+        username = request.POST.get('username', None)
+        if not username:
+            return HttpResponseBadRequest('bad username')
+        auth_token = FoursquareAuthToken.objects.get(username=username)
+        params = urllib.urlencode([
+            ('oauth_token', auth_token.token),
+            ('venueId', '4f3970aee4b08f009b927739'),
+            ('shout', 'An NFC generated checkin for Greylock hackfest!'),
+            ('broadcast', 'public,twitter'),
+        ])
+        print "POST:\n%s\n%s" % (checkin_url, params)
+        urllib2.urlopen(checkin_url, params)
+
+        icon = get_photo_url(auth_token.token)
+
+        message = "Checked into Foursquare!"
+    if icon:
+        out = tapmo.build_response(urls, message, icon)
+    else:
+        out = tapmo.build_response(urls, message)
+    return HttpResponse(out)
+
+
+def get_photo_url(auth_token):
+    url = "https://api.foursquare.com/v2/users/self"
+    params = urllib.urlencode([('oauth_token', auth_token)])
+    res = urllib2.urlopen(url, params).read()
+    res_data = json.loads(res)
+    photo = res_data['response']['user']['photo']
+    return "%s48x48%s" % (photo['prefix'], photo['suffix'])
+
 
 
 @login_required

@@ -12,10 +12,13 @@ channel.bind('status_change', function(data) {
     $.each(data.urls, function(i,url) {
         chrome.tabs.create({ url: url });
     });
-    var notice = window.webkitNotifications.createNotification(
-        '48.png', 'Tapmo.co!', data.message);
-    notice.show();
+    if (data.message.length > 0) {
+        var notice = window.webkitNotifications.createNotification(
+            '48.png', 'Tapmo.co!', data.message);
+        notice.show();
+    }
 });
+
 
 chrome.history.onVisited.addListener(function(result) {
 	console.log(result);
@@ -24,4 +27,4 @@ chrome.history.onVisited.addListener(function(result) {
 	}, function(res) {
 
 	});
-}); 
+});
