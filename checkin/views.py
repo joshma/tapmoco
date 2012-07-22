@@ -34,18 +34,17 @@ def get_redirect_uri():
 
 @csrf_exempt
 @require_POST
-def notify(request):
+def notify(request, username=None):
+    if not username:
+        return HttpResponseBadRequest('bad username')
     urls = []
     status = request.POST.get('status', '0')
     message = ""
     icon = None
     if status == '1':
         checkin_url = "https://api.foursquare.com/v2/checkins/add"
-        # Yay hard-code Dropbox
-        username = request.POST.get('username', None)
-        if not username:
-            return HttpResponseBadRequest('bad username')
         auth_token = FoursquareAuthToken.objects.get(username=username)
+        # Yay hard-code Dropbox
         params = urllib.urlencode([
             ('oauth_token', auth_token.token),
             ('venueId', '4f3970aee4b08f009b927739'),
@@ -75,6 +74,24 @@ def get_photo_url(auth_token):
     return photo
 
 
+def check(request, username=None):
+    if not username:
+        return HttpResponseBadRequest('missing username')
+    # TODO: THESE METHODS NEED TO CHECK FOR THE SECRET
+    exists = FoursquareAuthToken.objects.filter(username=username).exists()
+    return HttpResponse(json.dumps({
+        'valid': exists
+    }))
+
+
+def register(request, username=None):
+    if not username:
+        return HttpResponseBadRequest('missing username')
+    auth_url = get_auth_uri()
+    print auth_url
+    return redirect(auth_url)
+
+
 @login_required
 def callback(request):
     code = request.GET.get('code', None)
@@ -90,4 +107,5 @@ def callback(request):
         FoursquareAuthToken.objects.filter(username=request.user.username).delete()
     auth_token = FoursquareAuthToken(username=request.user.username, token=res_data['access_token'])
     auth_token.save()
+    # This redirect isn't fair!
     return redirect('hq')

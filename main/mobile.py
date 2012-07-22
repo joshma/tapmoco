@@ -24,6 +24,7 @@ def status(request, username=None, loc=0):
         urls = filter(lambda n: len(n) > 0, urls)
         m = 1 if profile.at_desk else 0
         for url in urls:
+            url = url % username
             notify_status_change.delay(user, url, loc, m)
         profile.save()
     return HttpResponse(m)

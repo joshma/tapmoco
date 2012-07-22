@@ -4,11 +4,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
+from main.models import Application, AppRegistration
 import random
 import string
 import re
-
-from checkin.views import check_fs_auth, get_auth_uri
+import urllib2
+import simplejson as json
 
 SECRET_SIZE = 10
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
@@ -73,32 +74,80 @@ def logout_view(request):
     return redirect('home')
 
 
+def generate_secret():
+    return ''.join(random.choice(string.letters) for i in xrange(SECRET_SIZE))
+
+
+def build_market_app(username):
+    def out(application):
+        try:
+            res = urllib2.urlopen(application.check_reg_url % username).read()
+        except urllib2.HTTPError:
+            print "ERROR"
+            res = json.dumps({'valid': False})
+        print "res: %s" % res
+        res_data = json.loads(res)
+        registered = res_data['valid']
+        print "registered: %s" % registered
+        return {
+            'url': application.reg_url % username,
+            'name': application.name,
+            'registered': registered,
+            'application': application
+        }
+    return out
+
+
 @login_required
 def hq(request):
-    profile = request.user.get_profile()
-    if not profile.secret:
-        profile.secret = ''.join(random.choice(string.letters) for i in xrange(SECRET_SIZE))
-        profile.save()
+    applications = Application.objects.filter(owner=request.user)
 
-    # Foursquare
-    fs_authorized = check_fs_auth(request.user.username)
+    market_apps = map(build_market_app(request.user.username), Application.objects.all())
+
+    # We need to actually save which ones are registered too.
+    AppRegistration.objects.filter(user=request.user).delete()
+    for market_app in market_apps:
+        if market_app.registered:
+            ar = AppRegistration(user=request.user, app=market_app.application)
+            ar.save()
 
     d = {
-        'profile': profile,
-        'fs': {
-            'authorized': fs_authorized,
-            'url': get_auth_uri()
-        }
+        'market_apps': market_apps,
+        'applications': applications
     }
     return render(request, 'hq.html', d)
 
 
 @login_required
 @require_POST
-def url_update(request):
-    url = request.POST.get('url', 'www.tapmo.co')
-    profile = request.user.get_profile()
-    profile.url = url
-    profile.save()
-    messages.success(request, "URL updated to %s" % url)
+def create_application(request):
+    name = request.POST.get('name', None)
+    reg_url = request.POST.get('register-url', None)
+    check_reg_url = request.POST.get('check-register-url', None)
+    update_url = request.POST.get('update-url', None)
+
+    if not (name and reg_url and check_reg_url and update_url):
+        messages.error(request, "Please fill out all fields.")
+        return redirect('hq')
+
+    reg_url = "http://" + reg_url
+    check_reg_url = "http://" + check_reg_url
+    update_url = "http://" + update_url
+
+    app = Application(owner=request.user, name=name, reg_url=reg_url,
+        check_reg_url=check_reg_url, update_url=update_url,
+        secret=generate_secret())
+    app.save()
+
+    messages.success(request, "Your application %s was created." % name)
+    return redirect('hq')
+
+
+@login_required
+@require_POST
+def delete_application(request):
+    application = Application.objects.get(id=request.POST.get('id', None))
+    if application:
+        application.delete()
+    messages.success(request, "Application %s successfully deleted." % application.name)
     return redirect('hq')

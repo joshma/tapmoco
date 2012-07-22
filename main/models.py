@@ -6,9 +6,21 @@ from datetime import datetime
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    url = models.CharField(max_length=1000, blank=True)
-    secret = models.CharField(max_length=20, blank=True)
     at_desk = models.BooleanField(default=False)
+
+
+class Application(models.Model):
+    owner = models.ForeignKey(User)
+    name = models.CharField(max_length=200)
+    reg_url = models.CharField(max_length=1000)
+    check_reg_url = models.CharField(max_length=1000)
+    update_url = models.CharField(max_length=1000)
+    secret = models.CharField(max_length=20, blank=True)
+
+
+class AppRegistration(models.Model):
+    user = models.ForeignKey(User)
+    app = models.ForeignKey(Application)
 
 
 class URLHistory(models.Model):

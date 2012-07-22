@@ -7,7 +7,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^notify$', 'checkin.views.notify'),
+    url(r'^notify/(?P<username>\w+@\w+\.\w+)$', 'checkin.views.notify'),
+    url(r'^check/(?P<username>\w+@\w+\.\w+)$', 'checkin.views.check'),
+    url(r'^register/(?P<username>\w+@\w+\.\w+)$', 'checkin.views.register'),
     url(r'^callback$', 'checkin.views.callback', name='checkin_callback'),
     # Examples:
     # url(r'^$', 'webmo.views.home', name='home'),
