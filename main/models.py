@@ -17,6 +17,9 @@ class Application(models.Model):
     update_url = models.CharField(max_length=1000)
     secret = models.CharField(max_length=20, blank=True)
 
+    def __str__(self):
+        return "%s [%s]" % (self.name, self.reg_url[:20])
+
 
 class AppRegistration(models.Model):
     user = models.ForeignKey(User)

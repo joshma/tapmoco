@@ -107,8 +107,8 @@ def hq(request):
     # We need to actually save which ones are registered too.
     AppRegistration.objects.filter(user=request.user).delete()
     for market_app in market_apps:
-        if market_app.registered:
-            ar = AppRegistration(user=request.user, app=market_app.application)
+        if market_app.get('registered', False):
+            ar = AppRegistration(user=request.user, app=market_app['application'])
             ar.save()
 
     d = {
