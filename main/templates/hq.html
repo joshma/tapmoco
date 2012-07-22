@@ -9,14 +9,16 @@
     <h2>App marketplace</h2>
     <div class="row">
     <div class="span8">
-        {% for market_app in market_apps %}
-        <h3>{{ market_app.name }}</h3>
-        {% if market_app.registered %}
-            <a href="#" class="btn btn-success">Authorized</a>
-        {% else %}
-            <a href="{{ market_app.url }}" class="btn btn-primary">Authorize application</a>
-        {% endif %}
-        {% endfor %}
+        <div class="well">
+            {% for market_app in market_apps %}
+            <h3>{{ market_app.name }} <small>by {{ market_app.owner }}</small></h3>
+            {% if market_app.registered %}
+                <a href="#" class="btn btn-success">Authorized</a>
+            {% else %}
+                <a href="{{ market_app.url }}" class="btn btn-primary">Authorize application</a>
+            {% endif %}
+            {% endfor %}
+        </div>
     </div>
     </div>
 </div>
