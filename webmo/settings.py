@@ -125,7 +125,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'djcelery',
     'south',
-    'checkin',
+    #'checkin',
     'main',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
