@@ -21,7 +21,10 @@ def status(request, username=None, loc=0):
         urls = [d['url'] for d in UserProfile.objects.filter(url__isnull=False).values('url')]
         urls = filter(lambda n: len(n) > 0, urls)
         for url in urls:
-            notify_status_change.delay(user, url)
+            try:
+                notify_status_change.delay(user, url)
+            except:
+                pass
         profile.save()
     m = 1 if profile.at_desk else 0
     return HttpResponse(m)
