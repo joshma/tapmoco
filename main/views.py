@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate, login, logout
 import random
 import string
 import pusher
-import time
 
 pusher.app_id = '24415'
 pusher.key = 'f00bf3021b6b454ddb23'
