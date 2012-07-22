@@ -10,6 +10,11 @@ class UserProfile(models.Model):
     at_desk = models.BooleanField(default=False)
 
 
+class URLHistory(models.Model):
+    user = models.OneToOneField(User)
+    url = models.CharField(max_length=1000, blank=True)
+
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)

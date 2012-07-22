@@ -2,9 +2,10 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.http import require_POST
 
 from tasks import notify_status_change
-from models import UserProfile
+from models import UserProfile, URLHistory
 
 
 @csrf_exempt
@@ -29,3 +30,17 @@ def status(request, username=None, loc=0):
 
 def tabs(request, username=None, loc=0):
     return HttpResponse('http://google.com')
+
+
+@require_POST
+def history(request, username=None):
+    url = request.POST.get('url', None)
+    if not url:
+        return HttpResponseBadRequest('URL missing')
+    try:
+        user = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest('invalid username!')
+    url_history = URLHistory(url=url, user=user)
+    url_history.save()
+    return HttpResponse('URL successfully saved')

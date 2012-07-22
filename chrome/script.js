@@ -11,3 +11,12 @@ var channel = pusher.subscribe('me@joshma.com');
 channel.bind('status_change', function(data) {
     console.log(data);
 });
+
+chrome.history.onVisited.addListener(function(result) {
+	console.log(result);
+	$.post('http://tapmo.co/user/me@joshma.com/', {
+		'url' : result.url
+	}, function(res) {
+
+	});
+}); 

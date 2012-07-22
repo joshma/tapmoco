@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^logout/', 'main.views.logout_view', name='logout'),
     url(r'^user/(?P<username>\w+@\w+\.\w+)/loc/(?P<loc>\d+)/status', 'main.mobile.status'),
     url(r'^user/(?P<username>\w+@\w+\.\w+)/loc/(?P<loc>\d+)/tabs', 'main.mobile.tabs'),
+    url(r'^user/(?P<username>\w+@\w+\.\w+)/history', 'main.mobile.history'),
 
     url(r'^hq/$', 'main.views.hq', name='hq'),
     url(r'^hq/url/$', 'main.views.url_update', name='url_update'),

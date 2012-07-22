@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import java.util.List;
 
@@ -48,10 +47,8 @@ public class MyActivity extends Activity {
 
             text.setText("User: " + first + "\tLocation: "+ second +"\t\tData: " + data.toString());
 
-            RequestParams postParams = new RequestParams("user", "me@joshma.com");
-
             AsyncHttpClient client = new AsyncHttpClient();
-            client.post(data.toString(), postParams, new AsyncHttpResponseHandler() {
+            client.post(data.toString(), new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
                     int status = Integer.parseInt(response);
