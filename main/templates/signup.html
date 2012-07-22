@@ -1,5 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Sign up for Tapmo.co</h1>
-<p>Closed for now!</p>
+<div class="page-header">
+    <h1>Sign up for Tapmo.co</h1>
+</div>
+<form action="" method="POST" class="form-horizontal well" autocomplete="off">
+    {% csrf_token %}
+    <div class="control-group{% if errors.email %} error{% endif %}">
+      <label class="control-label" for="email">Email</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="email" name="email" value="{{ email }}">
+        {% if errors.email %}
+            <p class="help-inline">{{ errors.email }}</p>
+        {% endif %}
+        <p class="help-block">This will later be your username!</p>
+      </div>
+    </div>
+    <div class="control-group{% if errors.password %} error{% endif %}">
+      <label class="control-label" for="password">Password</label>
+      <div class="controls">
+        <input type="password" class="input-xlarge" id="password" name="password" value="{{ password }}">
+        {% if errors.password %}
+            <p class="help-inline">{{ errors.password }}</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </div>
+    </div>
+</form>
 {% endblock %}

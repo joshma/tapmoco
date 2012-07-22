@@ -5,3 +5,7 @@ input[type=text],
 input[type=password] {
     margin: 0;
 }
+
+.developers {
+  margin-top: 20px;
+}

@@ -1,12 +1,15 @@
-from django.shortcuts import render, redirect
-from django.views.decorators.http import require_POST
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
 import random
 import string
-from pushtap import p
+import re
 
 SECRET_SIZE = 10
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
 
 
 def home(request):
@@ -14,7 +17,37 @@ def home(request):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    errors = {}
+    email = ''
+    password = ''
+    if request.method == 'POST':
+        email = request.POST.get('email', None)
+        password = request.POST.get('password', None)
+        if not email:
+            errors['email'] = 'Please enter an email'
+        elif not EMAIL_REGEX.match(email):
+            errors['email'] = 'Invalid email'
+        if not password:
+            errors['password'] = 'Please enter a password'
+        elif len(password) < 6:
+            errors['password'] = 'Must be at least 6 characters'
+        if not len(errors):
+            if User.objects.filter(email=email).exists():
+                user = authenticate(username=email, password=password)
+                if user is not None and user.is_active:
+                    return redirect('hq')
+                errors['email'] = 'Email already registered'
+            else:
+                User.objects.create_user(email, email, password)
+                user = authenticate(username=email, password=password)
+                login(request, user)
+                return redirect('hq')
+    d = {
+        'errors': errors,
+        'email': email,
+        'password': password
+    }
+    return render(request, 'signup.html', d)
 
 
 @require_POST
@@ -25,11 +58,13 @@ def login_view(request):
     if user is not None and user.is_active:
         login(request, user)
         return redirect('hq')
+    messages.error(request, "Invalid username and/or password.")
     return redirect('home')
 
 
 def logout_view(request):
     logout(request)
+    messages.success(request, "Logged out successfully.")
     return redirect('home')
 
 
