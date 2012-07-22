@@ -18,7 +18,8 @@ urlpatterns = patterns('',
     url(r'^hq/$', 'main.views.hq', name='hq'),
     url(r'^hq/url$', 'main.views.url_update', name='url_update'),
 
-    url(r'^checkin$', 'main.contrib.checkin'),
+    url(r'^checkin$', 'checkin.views.checkin'),
+    url(r'^checkin/callback$', 'checkin.views.checkin', name='checkin_callback'),
     # Examples:
     # url(r'^$', 'webmo.views.home', name='home'),
     # url(r'^webmo/', include('webmo.foo.urls')),

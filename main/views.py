@@ -8,6 +8,8 @@ import random
 import string
 import re
 
+from checkin.views import check_fs_auth, CLIENT_ID, CALLBACK_URL
+
 SECRET_SIZE = 10
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
 
@@ -74,8 +76,17 @@ def hq(request):
     if not profile.secret:
         profile.secret = ''.join(random.choice(string.letters) for i in xrange(SECRET_SIZE))
         profile.save()
+
+    # Foursquare
+    fs_authorized = check_fs_auth(request.user)
+
     d = {
-        'profile': profile
+        'profile': profile,
+        'fs': {
+            'authorized': fs_authorized,
+            'client_id': CLIENT_ID,
+            'callback_url': CALLBACK_URL
+        }
     }
     return render(request, 'hq.html', d)
 
