@@ -98,7 +98,8 @@ def build_market_app(username):
             'url': application.reg_url % username,
             'name': application.name,
             'registered': registered,
-            'application': application
+            'application': application,
+            'owner': application.owner.username
         }
     return out
 
