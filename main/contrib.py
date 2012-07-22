@@ -7,6 +7,6 @@ from tapmo_lib import tapmo
 @csrf_exempt
 @require_POST
 def checkin(request):
-    urls = ["http://www.foursquare.com"]
+    urls = []
     message = "Checked into Foursquare!"
     return HttpResponse(tapmo.build_response(urls, message))
