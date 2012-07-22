@@ -2,3 +2,5 @@ android/out
 venv
 *.pyc
 *.swp
+android/.idea/workspace.xml
+envvar
