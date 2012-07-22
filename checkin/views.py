@@ -44,8 +44,8 @@ def notify(request):
         ('shout', 'An NFC generated checkin for Greylock hackfest!'),
         ('broadcast', 'public,twitter'),
     ])
-    res = urllib2.urlopen(checkin_url, params).read()
-    print "checkin response: %s" % res
+    print "POST:\n%s\n%s" % (checkin_url, params)
+    urllib2.urlopen(checkin_url, params)
     message = "Checked into Foursquare!"
     return HttpResponse(tapmo.build_response(urls, message))
 
