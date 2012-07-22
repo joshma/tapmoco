@@ -16,7 +16,8 @@ urlpatterns = patterns('',
     url(r'^user/(?P<username>\w+@\w+\.\w+)/history', 'main.mobile.history'),
 
     url(r'^hq/$', 'main.views.hq', name='hq'),
-    url(r'^hq/url$', 'main.views.url_update', name='url_update'),
+    url(r'^hq/application$', 'main.views.create_application', name='create_application'),
+    url(r'^hq/application/delete$', 'main.views.delete_application', name='delete_application'),
 
     url(r'^checkin/', include('checkin.urls')),
     # Examples:

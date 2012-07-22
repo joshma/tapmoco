@@ -9,10 +9,14 @@
     <h2>App marketplace</h2>
     <div class="row">
     <div class="span8">
-        <h3>Foursquare</h3>
-        <a href="{{ fs.url }}" class="btn btn-{% if fs.authorized %}success{% else %}primary{% endif %}">
-            Authorize{% if fs.authorized %}d{% endif %}
-        </a>
+        {% for market_app in market_apps %}
+        <h3>{{ market_app.name }}</h3>
+        {% if market_app.registered %}
+            <a href="#" class="btn btn-success">Authorized</a>
+        {% else %}
+            <a href="{{ market_app.url }}" class="btn btn-primary">Authorize application</a>
+        {% endif %}
+        {% endfor %}
     </div>
     </div>
 </div>
@@ -24,18 +28,87 @@
     <p>Are you a developer? Set up your app below!</p>
     <div class="row">
     <div class="span6">
-        <h3>App endpoint</h3>
-        <p>Where should <strong>tapmo.co</strong> send NFC updates?</p>
-        <form class="well inline-form" action="{% url url_update %}" method="POST">
+        <form class="well form-horizontal" action="{% url create_application %}" method="POST">
+            <h3>Create a new application</h3>
+            <p>Where should <strong>tapmo.co</strong> send NFC updates? All URLs should leave out the <em>http://</em>.</p>
             {% csrf_token %}
-            <span>http:// <input type="text" class="input-xlarge" name="url" placeholder="www.yoursitehere.com/location" value="{{ profile.url }}" /></span>
-            <button type="submit" class="btn">Update</button>
+            <div class="control-group">
+                <label class="control-label" for="name">Name</label>
+                <div class="controls">
+                    <input type="text" class="input-xlarge" id="name" name="name">
+                    <p class="help-block">What's it called?</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="register-url">Registration URL</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on">http://</span>
+                        <input type="text" class="input-xlarge" id="register-url" name="register-url">
+                    </div>
+                    <p class="help-block">URL to authorize your servivce, tapmo.co will substitute <code>%s</code> with their usernames.</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="check-register-url">Check registration URL</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on">http://</span>
+                        <input type="text" class="input-xlarge" id="check-register-url" name="check-register-url">
+                    </div>
+                    <p class="help-block">URL to check if a user is registered, tapmo.co will substitute <code>%s</code> with their usernames.</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="update-url">Update URL</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on">http://</span>
+                        <input type="text" class="input-xlarge" id="update-url" name="update-url">
+                    </div>
+                    <p class="help-block">
+                        URL to send updates to, tapmo.co will substitute <code>%s</code> with their usernames. A POST request will be sent with parameters
+<pre>
+{
+    'loc': lat,lng,
+    'status': 1|0
+}
+</pre>
+                        where <code>loc</code> is the coordinate of the status update and <code>status</code> is a <code>1</code> if the user is at the computer and a <code>0</code> otherwise.
+                    </p>
+                </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">Create application</button>
+              </div>
+            </div>
         </form>
     </div>
     <div class="span6">
-        <h3>App secret</h3>
-        <p>When <strong>Tapmo.co</strong> talks to your server, we'll include this secret to let you know it's really us.</p>
-        <pre class="well">{{ profile.secret }}</pre>
+        <h3>Your applications</h3>
+        {% for application in applications %}
+        <div class="well">
+            <h4>{{ application.name }}</h4>
+            <dl>
+                <dt>register URL</dt>
+                <dd><pre>{{ application.reg_url }}</pre></dd>
+                <dt>check URL</dt>
+                <dd><pre>{{ application.check_reg_url }}</pre></dd>
+                <dt>update URL</dt>
+                <dd><pre>{{ application.update_url }}</pre></dd>
+                <dt>secret</dt>
+                <dd><pre>{{ application.secret }}</pre></dd>
+            </dl>
+            <form class="inline-form" action="{% url delete_application %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ application.id }}">
+                <button type="submit" class="btn btn-danger">Delete application</button>
+            </form>
+        </div>
+        {% empty %}
+        <p class="well">No applications yet.</p>
+        {% endfor %}
     </div>
     </div>
 </div>

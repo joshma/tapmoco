@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_POST
 
 from tasks import notify_status_change
-from models import UserProfile, URLHistory
+from models import URLHistory, AppRegistration
 
 
 @csrf_exempt
@@ -20,10 +20,11 @@ def status(request, username=None, loc=0):
         profile.at_desk = not profile.at_desk
 
         print 'Starting task to notify services of status change'
-        urls = [d['url'] for d in UserProfile.objects.filter(url__isnull=False).values('url')]
-        urls = filter(lambda n: len(n) > 0, urls)
+        apps = [ar.app for ar in AppRegistration.objects.filter(user=user)]
+        urls = [app.update_url for app in apps]
         m = 1 if profile.at_desk else 0
         for url in urls:
+            url = url % username
             notify_status_change.delay(user, url, loc, m)
         profile.save()
     return HttpResponse(m)

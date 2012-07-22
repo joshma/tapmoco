@@ -12,9 +12,8 @@ p = pusher.Pusher()
 
 @task()
 def notify_status_change(user, url, loc, status):
-    url = "http://%s" % url
     print "notifying %s" % url
-    params = urllib.urlencode([('username', user.username), ('loc', loc), ('status', status)])
+    params = urllib.urlencode([('loc', loc), ('status', status)])
     try:
         res = urllib2.urlopen(url, params).read()
     except urllib2.HTTPError as http_error:
