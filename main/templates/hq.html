@@ -10,7 +10,7 @@
     <div class="row">
     <div class="span8">
         <h3>Foursquare</h3>
-        <a href="{% if fs.authorized %}#{% else %}{{ fs.url }}{% endif %}" class="btn btn-{% if fs.authorized %}success{% else %}primary{% endif %}">
+        <a href="{{ fs.url }}" class="btn btn-{% if fs.authorized %}success{% else %}primary{% endif %}">
             Authorize{% if fs.authorized %}d{% endif %}
         </a>
     </div>

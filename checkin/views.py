@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from tapmo_lib import tapmo
@@ -37,7 +38,10 @@ def notify(request):
     urls = []
     checkin_url = "https://api.foursquare.com/v2/checkins/add"
     # Yay Dropbox
-    auth_token = FoursquareAuthToken.objects.get(user=request.user)
+    username = request.POST.get('username', None)
+    if not username:
+        return HttpResponseBadRequest('bad username')
+    auth_token = FoursquareAuthToken.objects.get(username=username)
     params = urllib.urlencode([
         ('oauth_token', auth_token.token),
         ('venueId', '4f3970aee4b08f009b927739'),
@@ -61,6 +65,8 @@ def callback(request):
     res = urllib2.urlopen(fs_url).read()
     res_data = json.loads(res)
     print res_data
-    auth_token = FoursquareAuthToken(user=request.user, token=res_data['access_token'])
+    if FoursquareAuthToken.objects.filter(username=request.user.username).exists():
+        FoursquareAuthToken.objects.filter(username=request.user.username).delete()
+    auth_token = FoursquareAuthToken(username=request.user.username, token=res_data['access_token'])
     auth_token.save()
     return redirect('hq')
