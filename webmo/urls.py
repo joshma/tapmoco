@@ -21,7 +21,8 @@ urlpatterns = patterns('',
     url(r'^hq/application$', 'main.views.create_application', name='create_application'),
     url(r'^hq/application/delete$', 'main.views.delete_application', name='delete_application'),
 
-    url(r'^checkin/', include('checkin.urls')),
+    # DEPRECATED: NOW IN ITS OWN HEROKU APP
+    # url(r'^checkin/', include('checkin.urls')),
     # Examples:
     # url(r'^$', 'webmo.views.home', name='home'),
     # url(r'^webmo/', include('webmo.foo.urls')),
