@@ -12,7 +12,8 @@ body {
 
 #notifications {
     width: 300px;
-    min-height: 200px;
+    height: 250px;
+    overflow-y: scroll;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -22,7 +23,17 @@ body {
 #notifications li {
     padding: 8px;
     background: #EEE;
+    line-height: 30px;
+    border-bottom: 1px solid #DDD;
 }
+
 #notifications .unread {
     background: white;
+}
+
+#notifications li img {
+  line-height: 30px;
+  vertical-align: middle;
+  margin-right: 6px;
+  border-radius: 4px;
 }
