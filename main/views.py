@@ -8,6 +8,8 @@ import random
 import string
 import re
 
+from checkin.views import check_fs_auth, get_auth_uri
+
 SECRET_SIZE = 10
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
 
@@ -17,6 +19,8 @@ def home(request):
 
 
 def signup(request):
+    if request.user and request.user.is_active:
+        return redirect('hq')
     errors = {}
     email = ''
     password = ''
@@ -35,6 +39,7 @@ def signup(request):
             if User.objects.filter(email=email).exists():
                 user = authenticate(username=email, password=password)
                 if user is not None and user.is_active:
+                    login(request, user)
                     return redirect('hq')
                 errors['email'] = 'Email already registered'
             else:
@@ -74,8 +79,16 @@ def hq(request):
     if not profile.secret:
         profile.secret = ''.join(random.choice(string.letters) for i in xrange(SECRET_SIZE))
         profile.save()
+
+    # Foursquare
+    fs_authorized = check_fs_auth(request.user.username)
+
     d = {
-        'profile': profile
+        'profile': profile,
+        'fs': {
+            'authorized': fs_authorized,
+            'url': get_auth_uri()
+        }
     }
     return render(request, 'hq.html', d)
 
@@ -87,4 +100,5 @@ def url_update(request):
     profile = request.user.get_profile()
     profile.url = url
     profile.save()
+    messages.success(request, "URL updated to %s" % url)
     return redirect('hq')

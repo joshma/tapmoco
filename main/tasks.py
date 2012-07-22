@@ -15,15 +15,21 @@ def notify_status_change(user, url, loc, status):
     url = "http://%s" % url
     print "notifying %s" % url
     params = urllib.urlencode([('username', user.username), ('loc', loc), ('status', status)])
-    res = urllib2.urlopen(url, params).read()
+    try:
+        res = urllib2.urlopen(url, params).read()
+    except urllib2.HTTPError as http_error:
+        res = http_error.read()
+        with open('/Users/joshma/error.html', 'w+') as f:
+            f.write(res)
     print "response: %s" % res
     try:
         data = json.loads(res)
     except json.decoder.JSONDecodeError:
         # Silently drop invalid responses.
-        pass
+        return
     out_data = {
         'urls': data.get('urls', []),
-        'message': data.get('message', 'No message')
+        'message': data.get('message', 'No message'),
+        'icon': data.get('icon', '48.png')
     }
     p[user.username].trigger('status_change', out_data)
