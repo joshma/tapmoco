@@ -30,7 +30,8 @@ def status(request, username=None, loc=0):
 
 
 def tabs(request, username=None, loc=0):
-    return HttpResponse('http://google.com')
+    url = URLHistory.objects.latest('time_added')
+    return HttpResponse(url.url)
 
 
 @csrf_exempt
