@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from main.models import Application, AppRegistration
+from webmo.settings import HOSTNAME
+import os
 import random
 import string
 import re
@@ -80,9 +82,11 @@ def generate_secret():
 
 def build_market_app(username):
     def out(application):
-        print "checking out %s" % (application.check_reg_url % username)
         try:
-            res = urllib2.urlopen(application.check_reg_url % username).read()
+            url = application.check_reg_url % username
+            url = fix_url(url)
+            print "checking out %s" % url
+            res = urllib2.urlopen(url).read()
         except urllib2.HTTPError:
             print "ERROR"
             res = json.dumps({'valid': False})
@@ -97,6 +101,15 @@ def build_market_app(username):
             'application': application
         }
     return out
+
+
+def fix_url(url):
+    # Replace references to HOSTNAME with localhost:$PORT
+    desired_match = "http://%s/" % HOSTNAME
+    replacement = "http://localhost:%s/" % (os.environ.get('PORT', '8000'))
+    if url[:len(desired_match)] == desired_match:
+        url = replacement + url[len(desired_match):]
+    return url
 
 
 @login_required
