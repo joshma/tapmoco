@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from datetime import datetime
 
 
 class UserProfile(models.Model):
@@ -13,6 +14,7 @@ class UserProfile(models.Model):
 class URLHistory(models.Model):
     user = models.OneToOneField(User)
     url = models.CharField(max_length=1000, blank=True)
+    time_added = models.DateField(auto_now_add=True, default=datetime.now())
 
 
 def create_user_profile(sender, instance, created, **kwargs):
