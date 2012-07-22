@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+import random
+import string
+
+SECRET_SIZE = 10
 
 
 def home(request):
@@ -32,9 +36,19 @@ def logout_view(request):
 def hq(request):
     profile = request.user.get_profile()
     if profile.secret == '':
-        profile.secret = 'NEWSECRET'
+        profile.secret = ''.join(random.choice(string.letters) for i in xrange(SECRET_SIZE))
         profile.save()
     d = {
         'profile': profile
     }
     return render(request, 'hq.html', d)
+
+
+@login_required
+@require_POST
+def url_update(request):
+    url = request.POST.get('url', 'www.tapmo.co')
+    profile = request.user.get_profile()
+    profile.url = url
+    profile.save()
+    return redirect('hq')

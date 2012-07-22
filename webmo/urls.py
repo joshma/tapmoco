@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     url(r'^logout/', 'main.views.logout_view', name='logout'),
     url(r'^user/(?P<userid>\d+)/loc/(?P<loc>\d+)', 'main.input.android', name='android'),
 
-    url(r'^hq/', 'main.views.hq', name='hq'),
+    url(r'^hq/$', 'main.views.hq', name='hq'),
+    url(r'^hq/url/$', 'main.views.url_update', name='url_update'),
     # Examples:
     # url(r'^$', 'webmo.views.home', name='home'),
     # url(r'^webmo/', include('webmo.foo.urls')),
