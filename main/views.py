@@ -100,4 +100,5 @@ def url_update(request):
     profile = request.user.get_profile()
     profile.url = url
     profile.save()
+    messages.success(request, "URL updated to <strong>%s</strong>" % url)
     return redirect('hq')

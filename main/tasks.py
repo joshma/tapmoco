@@ -21,7 +21,7 @@ def notify_status_change(user, url, loc, status):
         data = json.loads(res)
     except json.decoder.JSONDecodeError:
         # Silently drop invalid responses.
-        pass
+        return
     out_data = {
         'urls': data.get('urls', []),
         'message': data.get('message', 'No message')

@@ -32,7 +32,7 @@ def get_redirect_uri():
 
 @csrf_exempt
 @require_POST
-def checkin(request):
+def notify(request):
     urls = []
     message = "Checked into Foursquare!"
     return HttpResponse(tapmo.build_response(urls, message))
