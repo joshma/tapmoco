@@ -15,16 +15,17 @@ def status(request, username=None, loc=0):
     except ObjectDoesNotExist:
         return HttpResponseBadRequest('invalid username!')
     profile = user.get_profile()
+    m = 1 if profile.at_desk else 0
     if request.method == 'POST':
         profile.at_desk = not profile.at_desk
 
         print 'Starting task to notify services of status change'
         urls = [d['url'] for d in UserProfile.objects.filter(url__isnull=False).values('url')]
         urls = filter(lambda n: len(n) > 0, urls)
+        m = 1 if profile.at_desk else 0
         for url in urls:
-            notify_status_change.delay(user, url)
+            notify_status_change.delay(user, url, loc, m)
         profile.save()
-    m = 1 if profile.at_desk else 0
     return HttpResponse(m)
 
 
