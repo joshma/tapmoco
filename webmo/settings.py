@@ -121,6 +121,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gunicorn',
+    'kombu.transport.django',
+    'djcelery',
+    'south',
     'main',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -178,3 +181,5 @@ from django.core.urlresolvers import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('hq')
 
 LOGIN_URL = reverse_lazy('home')
+
+BROKER_BACKEND = 'django'

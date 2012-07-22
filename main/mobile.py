@@ -5,10 +5,13 @@ count = 0
 
 
 @csrf_exempt
-def android(request, userid=0, loc=0):
+def status(request, userid=0, loc=0):
     global count
     if request.method == 'POST':
         count += 1
-        return HttpResponse(count)
     m = count % 2
     return HttpResponse(m)
+
+
+def tabs(request, userid=0, loc=0):
+    return HttpResponse('google.com')
