@@ -8,6 +8,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     url(r'^$', 'main.views.home', name='home'),
+    url(r'^signup/', 'main.views.signup', name='signup'),
+    url(r'^user/(?P<userid>\d+)/loc/(?P<loc>\d+)', 'main.input.android', name='android'),
     # Examples:
     # url(r'^$', 'webmo.views.home', name='home'),
     # url(r'^webmo/', include('webmo.foo.urls')),
