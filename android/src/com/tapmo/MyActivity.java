@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
@@ -22,6 +23,7 @@ public class MyActivity extends Activity {
     Uri data;
     ProgressBar progressBar;
     Context context;
+    LinearLayout loginContainer;
     /**
      * Called when the activity is first created.
      */
@@ -34,6 +36,7 @@ public class MyActivity extends Activity {
 
         deskBackground = (ImageView) findViewById(R.id.desk_background);
         progressBar = (ProgressBar) findViewById(R.id.progress_circle);
+        loginContainer = (LinearLayout) findViewById(R.id.login_container);
 
         data = getIntent().getData();
 
@@ -41,6 +44,8 @@ public class MyActivity extends Activity {
             List<String> params = data.getPathSegments();
             String first = params.get(1);
             String second = params.get(3);
+
+            loginContainer.setVisibility(View.GONE);
 
             progressBar.setVisibility(View.VISIBLE);
 
