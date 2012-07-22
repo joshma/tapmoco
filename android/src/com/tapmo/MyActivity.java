@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
@@ -18,9 +20,10 @@ import java.util.List;
 public class MyActivity extends Activity {
 
     TextView text, text2;
-    LinearLayout container;
     ImageView deskBackground;
     Uri data;
+    ProgressBar progressBar;
+    Context context;
     /**
      * Called when the activity is first created.
      */
@@ -29,10 +32,12 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        context = this;
+
         text = (TextView) findViewById(R.id.text);
         text2 = (TextView) findViewById(R.id.text2);
         deskBackground = (ImageView) findViewById(R.id.desk_background);
-        container = (LinearLayout) findViewById(R.id.container);
+        progressBar = (ProgressBar) findViewById(R.id.progress_circle);
 
         data = getIntent().getData();
 
@@ -43,6 +48,7 @@ public class MyActivity extends Activity {
 
             text2.setVisibility(View.GONE);
             text.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
 
 
             text.setText("User: " + first + "\tLocation: "+ second +"\t\tData: " + data.toString());
@@ -54,6 +60,10 @@ public class MyActivity extends Activity {
                     int status = Integer.parseInt(response);
                     if(status == 1) {
                         deskBackground.setVisibility(View.VISIBLE);
+                        Animation fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+                        deskBackground.startAnimation(fadeInAnimation );
+
+                        progressBar.setVisibility(View.GONE);
                         Context context = getApplicationContext();
                         CharSequence text = "Successfully checked into your desk and logged you in";
                         int duration = Toast.LENGTH_LONG;
