@@ -69,7 +69,10 @@ def get_photo_url(auth_token):
     params = urllib.urlencode([('oauth_token', auth_token)])
     url = "https://api.foursquare.com/v2/users/self?%s" % params
     print "getting: %s" % url
-    res = urllib2.urlopen(url).read()
+    try:
+        res = urllib2.urlopen(url).read()
+    except urllib2.HttpError as e:
+        res = e.read()
     print "received res:" % res
     res_data = json.loads(res)
     photo = res_data['response']['user']['photo']
