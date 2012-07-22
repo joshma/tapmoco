@@ -162,3 +162,19 @@ DATABASES = {
     'default': dj_database_url.config(default='postgres://localhost/tapmo')
 }
 
+
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher',
+)
+
+AUTH_PROFILE_MODULE = 'main.UserProfile'
+
+from django.core.urlresolvers import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('hq')
+
+LOGIN_URL = reverse_lazy('home')

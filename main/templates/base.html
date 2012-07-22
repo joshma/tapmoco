@@ -21,6 +21,23 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="/">Tapmo.co</a>
+                    {% if user.is_authenticated %}
+                    <ul class="nav pull-right">
+                        <li>
+                            <a href="{% url hq %}">home</a>
+                        </li>
+                        <li>
+                            <a href="{% url logout %}">logout</a>
+                        </li>
+                    </ul>
+                    {% else %}
+                    <form class="form-inline navbar-form pull-right" action="{% url login %}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" class="span2" name="username">
+                        <input type="password" class="span2" name="password">
+                        <button type="submit" class="btn">login</button>
+                    </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
