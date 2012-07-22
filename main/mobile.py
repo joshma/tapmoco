@@ -2,7 +2,9 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+
 from tasks import notify_status_change
+from models import UserProfile
 
 
 @csrf_exempt
@@ -14,8 +16,12 @@ def status(request, username=None, loc=0):
     profile = user.get_profile()
     if request.method == 'POST':
         profile.at_desk = not profile.at_desk
+
         print 'Starting task to notify services of status change'
-        notify_status_change.delay(user)
+        urls = [d['url'] for d in UserProfile.objects.filter(url__isnull=False).values('url')]
+        urls = filter(lambda n: len(n) > 0, urls)
+        for url in urls:
+            notify_status_change.delay(user, url)
         profile.save()
     m = 1 if profile.at_desk else 0
     return HttpResponse(m)

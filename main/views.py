@@ -41,7 +41,7 @@ def logout_view(request):
 @login_required
 def hq(request):
     profile = request.user.get_profile()
-    if profile.secret == '':
+    if not profile.secret:
         profile.secret = ''.join(random.choice(string.letters) for i in xrange(SECRET_SIZE))
         profile.save()
     d = {
