@@ -28,18 +28,37 @@
         android:orientation="vertical"
         android:padding="@dimen/holo_gap"
         android:gravity="center"
+        android:weightSum="100"
+        android:background="@drawable/landing_page"
         >
         <TextView
-                android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hello World, MyActivity"
+                android:text="@string/app_name"
+                android:gravity="center_horizontal"
+                style="@style/TitleName"
+            />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="100"
+            />
+        <Button
+                android:id="@+id/sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_in"
+                android:layout_marginBottom="@dimen/holo_gap_half"
+                android:onClick="doSignIn"
+                style="@style/Button"
                 />
-        <TextView
-                android:id="@+id/text2"
+        <Button
+                android:id="@+id/sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hello World, MyActivity"
+                android:text="@string/sign_up"
+                android:onClick="doSignUp"
+                style="@style/Button"
                 />
     </LinearLayout>
 </RelativeLayout>

@@ -10,7 +10,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -19,7 +18,6 @@ import java.util.List;
 
 public class MyActivity extends Activity {
 
-    TextView text, text2;
     ImageView deskBackground;
     Uri data;
     ProgressBar progressBar;
@@ -34,8 +32,6 @@ public class MyActivity extends Activity {
 
         context = this;
 
-        text = (TextView) findViewById(R.id.text);
-        text2 = (TextView) findViewById(R.id.text2);
         deskBackground = (ImageView) findViewById(R.id.desk_background);
         progressBar = (ProgressBar) findViewById(R.id.progress_circle);
 
@@ -46,12 +42,7 @@ public class MyActivity extends Activity {
             String first = params.get(1);
             String second = params.get(3);
 
-            text2.setVisibility(View.GONE);
-            text.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
-
-
-            text.setText("User: " + first + "\tLocation: "+ second +"\t\tData: " + data.toString());
 
             AsyncHttpClient client = new AsyncHttpClient();
             client.post(data.toString(), new AsyncHttpResponseHandler() {
