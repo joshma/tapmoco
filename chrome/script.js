@@ -14,7 +14,7 @@ channel.bind('status_change', function(data) {
 
 chrome.history.onVisited.addListener(function(result) {
 	console.log(result);
-	$.post('http://tapmo.co/user/me@joshma.com/', {
+	$.post('http://www.tapmo.co/user/me@joshma.com/history', {
 		'url' : result.url
 	}, function(res) {
 

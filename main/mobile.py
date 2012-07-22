@@ -32,6 +32,7 @@ def tabs(request, username=None, loc=0):
     return HttpResponse('http://google.com')
 
 
+@csrf_exempt
 @require_POST
 def history(request, username=None):
     url = request.POST.get('url', None)
