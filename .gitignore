@@ -4,3 +4,4 @@ venv
 *.swp
 android/.idea/workspace.xml
 envvar
+.DS_Store
