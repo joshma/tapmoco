@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from tapmo_lib import tapmo
 from webmo.settings import HOSTNAME
 import os
+import urllib
 import urllib2
 import simplejson as json
 
@@ -34,6 +35,17 @@ def get_redirect_uri():
 @require_POST
 def notify(request):
     urls = []
+    checkin_url = "https://api.foursquare.com/v2/checkins/add"
+    # Yay Dropbox
+    auth_token = FoursquareAuthToken.objects.get(user=request.user)
+    params = urllib.urlencode([
+        ('oauth_token', auth_token.token),
+        ('venueId', '4f3970aee4b08f009b927739'),
+        ('shout', 'An NFC generated checkin for Greylock hackfest!'),
+        ('broadcast', 'public,twitter'),
+    ])
+    res = urllib2.urlopen(checkin_url, params).read()
+    print "checkin response: %s" % res
     message = "Checked into Foursquare!"
     return HttpResponse(tapmo.build_response(urls, message))
 
