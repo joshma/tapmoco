@@ -81,7 +81,7 @@ def hq(request):
         profile.save()
 
     # Foursquare
-    fs_authorized = check_fs_auth(request.user)
+    fs_authorized = check_fs_auth(request.user.username)
 
     d = {
         'profile': profile,
@@ -100,5 +100,5 @@ def url_update(request):
     profile = request.user.get_profile()
     profile.url = url
     profile.save()
-    messages.success(request, "URL updated to <strong>%s</strong>" % url)
+    messages.success(request, "URL updated to %s" % url)
     return redirect('hq')

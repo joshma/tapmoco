@@ -19,8 +19,8 @@ CLIENT_SECRET = os.environ.get('FS_CLIENT_SECRET', '5AWHXKMHP1Q55DMK4AXN4NU0CG4X
 CALLBACK_URL = reverse_lazy('checkin_callback')
 
 
-def check_fs_auth(user):
-    return FoursquareAuthToken.objects.filter(user=user).exists()
+def check_fs_auth(username):
+    return FoursquareAuthToken.objects.filter(username=username).exists()
 
 
 def get_auth_uri():
@@ -69,11 +69,7 @@ def get_photo_url(auth_token):
     params = urllib.urlencode([('oauth_token', auth_token)])
     url = "https://api.foursquare.com/v2/users/self?%s" % params
     print "getting: %s" % url
-    try:
-        res = urllib2.urlopen(url).read()
-    except urllib2.HttpError as e:
-        res = e.read()
-    print "received res:" % res
+    res = urllib2.urlopen(url).read()
     res_data = json.loads(res)
     photo = res_data['response']['user']['photo']
     return photo

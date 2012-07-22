@@ -14,7 +14,7 @@ channel.bind('status_change', function(data) {
     });
     if (data.message.length > 0) {
         var notice = window.webkitNotifications.createNotification(
-            '48.png', 'Tapmo.co!', data.message);
+            data.icon, 'Tapmo.co!', data.message);
         notice.show();
     }
 });
